@@ -38,3 +38,7 @@ Home page is divided into three section.
 --> Backend -> core python
 
 --> database -> postgresql
+
+------------------------------------------------------------------->>>
+which python modules needs to be install, is attached with the 
+requirements.txt file in the repo.
