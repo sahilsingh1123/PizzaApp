@@ -1,0 +1,114 @@
+{% load static %}
+{% csrf_token %}
+
+<!DOCTYPE html>
+<html lang="en">
+<script>    var GLOBAL_PATH = '{% static '/' %}'; </script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title> Pizza | Homepage </title>
+    <link rel="stylesheet" type="text/css" href="{%  static  'css/semantic.min.css' %} ">
+
+</head>
+<body>
+    <div class="main_page" style="width: 100%; overflow: auto; background-color: #fcf8e3; height: 650px;">
+        <div class="pizzaPage" style="margin-left: 2%">
+            <div class="title" >
+               <h1> <label style="margin: auto; font-size: 25px"> Pizza Information </label> </h1>
+            </div>
+
+    {#        div for taking the input related to pizza and storing it#}
+            <div class="update pizza" style="overflow: auto; width: 30%">
+                <div class="pizzaBox" style="display: flex; flex-direction: row;padding-top: 2%">
+                    <div style="width: 45%">
+                        <label>Pizza Type*</label>
+                    </div>
+                    <div class="saDropdown" style="width: 55%;">
+                        <select id="pizzaTypeDD" style="width: 100%" class="ui dropdown"
+                                tabindex="38003"
+                                data-parsley-error-message="" parsley-trigger="change"
+                                data-parsley-errors-container="#errColumnName" required>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pizzaBox" style="display: flex; flex-direction: row;padding-top: 2%">
+                    <div style="width: 45%">
+                    <label>Pizza Size*</label>
+                    </div>
+                    <div class="saDropdown" style="width: 55%;">
+                        <select id="pizzaSizeDD" style="width: 100%" class="ui dropdown"
+                                tabindex="38003"
+                                data-parsley-error-message="" parsley-trigger="change"
+                                data-parsley-errors-container="#errColumnName" required>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pizzaBox" style="width: 100%;flex-direction: row; display: flex;padding-top: 2%">
+                    <div style="width: 43.5%"><label>Toppings</label></div>
+                    <div class="ui input">
+                        <input tabindex="" id="toppings" style="width: 55%" type="text" placeholder="Default" maxlength="64">
+                    </div>
+                </div>
+
+                <div class="button div" style="display: flex; flex-direction: row; padding-top: 4%">
+                    <div class="update botton" style="margin-right: 2%">
+                        <button class="ui button" id="updateButton" >Update</button>
+                    </div>
+                    <div>
+                        <button class="ui button" id="cancelButton">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            {% comment %}this is for table format which shows the list of pizza{% endcomment %}
+            <div class="table format" style="flex-direction: row; display: flex">
+                <div class="pizza table" style="margin-top: 5%; width: 70%">
+                    <div id="pizzaList" style="min-height: 98%;height:98%; overflow-y: auto;border-top: 1px solid lightgray; border-bottom: 1px solid lightgray;">
+                        <table class="ui fixed single line celled table" style="overflow: auto">
+                            <tbody>
+                            </tbody>
+                    </table>
+                    </div>
+                </div>
+
+                <div class="filter" style="margin-left:0.9%;width: 30%;margin-top: 5%;border-top: 1px solid lightgray">
+                    <div class="title"  style="padding-top: 5px">
+                       <h7> <label style="margin: auto; font-size: 25px"> Filter </label> </h7>
+                    </div>
+                    <div class="pizzaBox" style="display: flex; flex-direction: row;padding-top: 3%">
+                        <div style="width: 30%">
+                            <label>Pizza Type*</label>
+                        </div>
+                        <div class="saDropdown" style="width: 65%;">
+                            <select id="filterPizzaTypeDD" style="width: 100%" class="ui dropdown"
+                                    tabindex="38003"
+                                    data-parsley-error-message="" parsley-trigger="change"
+                                    data-parsley-errors-container="#errColumnName" required>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="pizzaBox" style="display: flex; flex-direction: row;padding-top: 2%">
+                        <div style="width: 30%">
+                        <label>Pizza Size*</label>
+                        </div>
+                        <div class="saDropdown" style="width: 65%;">
+                            <select id="filterPizzaSizeDD" style="width: 100%" class="ui dropdown"
+                                    tabindex="38003"
+                                    data-parsley-error-message="" parsley-trigger="change"
+                                    data-parsley-errors-container="#errColumnName" required>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+<script src="{%  static  'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{%  static  'js/PizzaHandler.js' %}"></script>
+<script src="{%  static  'js/semantic.min.js' %}"></script>
+</body>
+</html>
