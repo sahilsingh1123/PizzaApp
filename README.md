@@ -32,8 +32,8 @@ Home page is divided into three section.
 
 # technologies used.
 --> Frontend- for UI and events hadling HTML and JAVASCRIPT is being used. 
-	--library for UI is SEMANTIC UI
-	-- Event handling - JQUERY
+	--library for UI is SEMANTIC UI - 2.2.12
+	-- Event handling - JQUERY - 3.2.1
 
 --> Backend -> core python 3.7
 
