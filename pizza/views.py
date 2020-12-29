@@ -13,9 +13,14 @@ def savePizzaData(request):
     pizzaType = request.POST.get("Type")
     pizzaSize = request.POST.get("Size")
     pizzaToppings = request.POST.get("Toppings")
-    dbState = PizzaTable(type=pizzaType, size=pizzaSize, toppings=pizzaToppings)
-    dbState.save()
-    responseData['message'] = 'Success'
+    try:
+        dbState = PizzaTable(type=pizzaType, size=pizzaSize, toppings=pizzaToppings)
+        dbState.save()
+        responseData['message'] = 'Success'
+    except Exception as e:
+        print('exception is : ' + e)
+        responseData['message'] = str(e)
+
     return JsonResponse(responseData)
 
 @csrf_protect
@@ -34,13 +39,17 @@ def getPizzaData(request):
             query = query + "AND type = '" + filterPizzaType + "'"
 
     responseData = {}
-    if (len(query) != 0):
-        data = PizzaTable.objects.raw("select * from pizza_pizzatable " + query)
-    else :
-        data = PizzaTable.objects.raw("select * from pizza_pizzatable")
-    dataList = makeDBData(data)
-    responseData['data'] = dataList
-    responseData['message'] = 'Success'
+    try:
+        if (len(query) != 0):
+            data = PizzaTable.objects.raw("select * from pizza_pizzatable " + query)
+        else:
+            data = PizzaTable.objects.raw("select * from pizza_pizzatable")
+        dataList = makeDBData(data)
+        responseData['data'] = dataList
+        responseData['message'] = 'Success'
+    except Exception as e:
+        print('exception is : ' + e)
+        responseData['message'] = str(e)
     return JsonResponse(responseData)
 
 def makeDBData(data):
@@ -59,8 +68,12 @@ def makeDBData(data):
 def deletePizzaData(request):
     responseData = {}
     pizzaId = request.POST.get("Id")
-    PizzaTable.objects.filter(id=pizzaId).delete()
-    responseData['message'] = 'Success'
+    try:
+        PizzaTable.objects.filter(id=pizzaId).delete()
+        responseData['message'] = 'Success'
+    except Exception as e:
+        print('exception is : ' + e)
+        responseData['message'] = str(e)
     return JsonResponse(responseData)
 
 @csrf_protect
@@ -72,13 +85,16 @@ def editPizzaData(request):
     pizzaSize = request.POST.get('Size')
     pizzaToppings = request.POST.get('Toppings')
 
-    data = PizzaTable.objects.filter(id=pizzaId)
-    for ob in data:
-        ob.type = pizzaType
-        ob.size = pizzaSize
-        ob.toppings = pizzaToppings
-        ob.save()
-
-    responseData['message'] = 'Success'
+    try:
+        data = PizzaTable.objects.filter(id=pizzaId)
+        for ob in data:
+            ob.type = pizzaType
+            ob.size = pizzaSize
+            ob.toppings = pizzaToppings
+            ob.save()
+        responseData['message'] = 'Success'
+    except Exception as e:
+        print('exception is : ' + e)
+        responseData['message'] = str(e)
     return JsonResponse(responseData)
 

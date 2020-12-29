@@ -1,4 +1,4 @@
-
+//this class handles all the events related to homepage.
 class PizzaHandler {
     constructor() {
         var editPizzaId = 'None';
