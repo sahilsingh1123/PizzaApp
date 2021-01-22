@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'pizzacorp',
-        'PASSWORD': 'pizzacorp',
+        'PASSWORD': 'pizzaCorp',
         'HOST': 'localhost'
     }
 }

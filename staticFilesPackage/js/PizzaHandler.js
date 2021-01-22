@@ -1,10 +1,12 @@
-
+//this class handles all the events related to homepage.
 class PizzaHandler {
     constructor() {
+        var editPizzaId = 'None';
+        var isEdit = false;
         var pizzaType = 'Regular';
-        var pizzaData = [];
         var pizzaSize = 'Small';
-        var pizzaToppings = 'None';
+        var pizzaToppings = 'Default';
+        var pizzaData = [];
         var filterPizzaSize = 'None';
         var filterPizzaType = 'None';
         var pizzaTypeDD = $('#pizzaTypeDD');
@@ -21,14 +23,15 @@ class PizzaHandler {
         fillSizeDataFilter(filterPizzaSizeDD);
         createTable(pizzaItemTable);
         updateButton.unbind('click').bind('click',onApprove);
+        cancelButton.unbind('click').bind('click',onCancel);
 
         function fillTypeData ($model) {
             $model.empty();
+            pizzaType = 'Regular';
             $model.append('<option value="' + 'Regular_Type' + '">' + 'Regular' + '</option>');
             $model.append('<option value="' + 'Square_Type' + '">' + 'Square' + '</option>');
             $model.dropdown().dropdown({
                 onChange: function (dsValue, text, $dsElement) {
-                    console.log("inside on change function");
                     pizzaType = text;
                 }
             })
@@ -41,15 +44,15 @@ class PizzaHandler {
             $model.append('<option value="' + 'Square_Type' + '">' + 'Square' + '</option>');
             $model.dropdown().dropdown({
                 onChange: function (dsValue, text, $dsElement) {
-                    console.log("inside on change function");
                     filterPizzaType = text;
                     updateTable();
                 }
             })
-        };
+        }
 
         function fillSizeData ($model) {
             $model.empty();
+            pizzaSize = 'Small';
             $model.append('<option value="' + 'Small_Size' + '">' + 'Small' + '</option>');
             $model.append('<option value="' + 'Medium_Size' + '">' + 'Medium' + '</option>');
             $model.append('<option value="' + 'Large_Size' + '">' + 'Large' + '</option>');
@@ -57,11 +60,10 @@ class PizzaHandler {
             $model.append('<option value="' + 'Family_Size' + '">' + 'Family Pack' + '</option>');
             $model.dropdown().dropdown({
                 onChange: function (dsValue, text, $dsElement) {
-                    console.log("inside on change function");
                     pizzaSize = text;
                 }
             })
-        };
+        }
 
         function fillSizeDataFilter ($model) {
             $model.empty();
@@ -73,7 +75,6 @@ class PizzaHandler {
             $model.append('<option value="' + 'Family_Size' + '">' + 'Family Pack' + '</option>');
             $model.dropdown().dropdown({
                 onChange: function (dsValue, text, $dsElement) {
-                    console.log("inside on change function");
                     filterPizzaSize = text;
                     updateTable();
                 }
@@ -86,7 +87,6 @@ class PizzaHandler {
 
         function createTable (pizzaItemTable) {
             getPizzaInfo();
-            debugger;
             pizzaItemTable.empty();
             pizzaItemTable.append('<thead>\n' +
                 '                    <tr><th>Type</th>\n' +
@@ -120,91 +120,76 @@ class PizzaHandler {
         }
 
         function onDelete (event) {
-            console.log('inside delete fun');
-            /*var dictId = $(event.target).attr('id').split("trash")[1];
-            var dictName = getDictName(dictId);
-            deleteDict(dictId, dictName);
-            var modelNameToBeDeleted = $(this).closest('tr').attr('id');
-            $("#" + modelNameToBeDeleted).remove();*/
+            var pizzaId = $(event.target).attr('id').split("trash")[1];
+            deletePizzaData(pizzaId);
+            var pizzaToDelete = $(this).closest('tr').attr('id');
+            $("#" + pizzaToDelete).remove();
         }
 
         function onEdit (event) {
-            console.log('inside edit fun');
-            /*var dictId = $(event.target).attr('id').split("edit")[1];
-            var datasetPath = getFilePath(dictId);
-            $BrowseEdit = modal.getElement("#fileEditDict");
-            $BrowseEdit.click();
-            $BrowseEdit.on('change', function () {
-                var editFormData = new FormData();
-                var fileName = $BrowseEdit[0].files[0].name;
-                var data = $BrowseEdit[0].files[0];
-                editFormData.append("dictId", dictId);
-                editFormData.append("DictFile", data);
-                editFormData.append("fileName", fileName);
-                editFormData.append("datasetPath", datasetPath);
-                updateCsv(editFormData);
-                $BrowseEdit.empty();
-            });*/
+            var pizzaId = $(event.target).attr('id').split("edit")[1];
+            var data = getPizzaDataFromMem(pizzaId);
+            if (data.Id !== undefined) {
+                var type = data.Type;
+                var size = data.Size;
+                var toppings = data.Toppings;
+                pizzaTypeDD.dropdown('set selected', type);
+                pizzaSizeDD.dropdown('set selected', size);
+                toppingsDiv.val(toppings);
+                isEdit = true;
+                editPizzaId = data.Id;
+            }
         }
 
-        function deletePizzaData (dictId, dictName) {
-            /*var data = {
-                requestType: "deleteDict",
-                dictId: dictId,
-                dictName: dictName
-            };
-            var dmxAjax = new DMXAjax();
-            dmxAjax.fireAjax({
-                type: "POST",
-                data: data,
-                async: false,
-                url: DIContext.context + "/request/UploadDictionary/UploadDictionaryRequest",
-                serverSuccess: function (response) {
-                    DMXErrorBox.success(response.message);
-                    deleteIdFromDictInfo(dictId);
-
-                },
-                serverError: function (response) {
-                    DMXErrorBox.error(response.message);
+        function getPizzaDataFromMem(pizzaId) {
+            var data = {};
+            for (var i = 0; i < pizzaData.length; i++) {
+                var info = pizzaData[i];
+                var id = info.Id;
+                if (id.toString() === pizzaId) {
+                    data = info;
                 }
-            })*/
+            }
+            return data
         }
 
-        this.getDictInfo = function () {
-            /*var dmxAjax = new DMXAjax();
-            dmxAjax.fireAjax({
-                type: "POST",
-                data: {requestType: "getDictInfo"},
-                async: false,
-                url: DIContext.context + "/request/UploadDictionary/UploadDictionaryRequest",
-                serverSuccess: function (response) {
-                    dictInfo = [];
-                    dictInfo = response.data;
-                },
-                serverError: function (response) {
-                    DMXErrorBox.error(response.message);
-                },
-                loading: function () {
-                    $('body').append($('<div class="ui active inverted dimmer diBodyLoader"><div class="ui text loader">Loading</div></div>'));
-                    // DMXRequest.addLoaderToDivNoCheck($('body'))
-                },
-                unloading: function () {
-                    $('body').find('.inverted.dimmer:not(.ignoreDimmer)').remove();
-                }
-
-            })*/
-        };
-
-        this.onCancel = function () {
-            //modal.hide();
-        };
+        function onCancel () {
+            pizzaToppings = 'Default';
+            fillTypeData(pizzaTypeDD);
+            fillSizeData(pizzaSizeDD);
+            toppingsDiv.val("");
+            isEdit = false;
+        }
 
         function onApprove() {
             var toppingVal = toppingsDiv.val();
-            if (toppingVal !== undefined) {
+            if (toppingVal !== undefined && toppingVal.length > 1) {
                 pizzaToppings = toppingVal;
             }
-            savePizzaInfo();
+            if (isEdit) {
+                editPizzaInfo(editPizzaId);
+            }else {
+                savePizzaInfo();
+            }
+            isEdit = false;
+            onCancel();
+        }
+
+        function deletePizzaData (pizzaId) {
+            $.ajax({
+                type: 'POST',
+                url: '/pizza/delete',
+                data:{
+                    Id: pizzaId
+                },
+                async: false,
+                success: function (response) {
+                    var message = response.message;
+                    if (message !== "Success") {
+                        alert(message);
+                    }
+                },
+            });
         }
 
         function savePizzaInfo() {
@@ -218,7 +203,30 @@ class PizzaHandler {
                 },
                 success: function (response) {
                     var message = response.message;
-                    console.log(message);
+                    if (message !== "Success") {
+                        alert(message);
+                    }
+                    updateTable();
+                }
+            });
+        }
+
+        function editPizzaInfo(editPizzaId) {
+            $.ajax({
+                type: 'POST',
+                url: '/pizza/edit',
+                data:{
+                    Id: editPizzaId,
+                    Type: pizzaType,
+                    Size: pizzaSize,
+                    Toppings: pizzaToppings,
+                },
+                success: function (response) {
+                    var message = response.message;
+                    if (message !== "Success") {
+                        alert(message);
+                    }
+                    updateTable();
                 }
             });
         }
@@ -235,8 +243,10 @@ class PizzaHandler {
                 success: function (response) {
                     pizzaData = response.data;
                     var message = response.message;
-                    console.log(message);
-                }
+                    if (message !== "Success") {
+                        alert(message);
+                    }
+                },
             });
         }
     }
@@ -250,58 +260,3 @@ $(document).ready(function () {
 
 
 
-
-
-//########################################################################
-/*var sentimentVar = '';
-
-var Analyze = $("#SAAnalyze");
-Analyze.on("click", function () {
-    sentimentVar = $('#text_area').val();
-    //loadPage('index.html') //--> will get back to it later..
-    //this is for vivken sentiment only... as we add more diversity we will
-    //call different method accordingly
-    getViveknSentiment();
-});*/
-
-
-function getViveknSentiment() {
-    document.getElementById('sentimentResultDisplay').value = "";
-    $.ajax({
-        type: 'POST',
-        url: '/sentimentResult/viveknSentiment',
-        data:{
-            sentimentText: sentimentVar
-        },
-        success: function (response) {
-            var result = response.sentiment_value;
-            var message = response.message;
-            document.getElementById('sentimentResultDisplay').value = result;
-        }
-    });
-
-}
-
-
-
-//this method is not used for now but we will think of extending and making some
-//great use of this method too....
-function loadPage(path) {
-    var response = null;
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", path, false);
-    xhr.onload = function (e) {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                response = xhr.responseText;
-            } else {
-                console.error(xhr.statusText)
-            }
-        }
-    };
-    xhr.onerror = function (e) {
-        console.error(xhr.statusText);
-    };
-    xhr.send();
-    return response;
-}
