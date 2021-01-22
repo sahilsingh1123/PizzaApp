@@ -97,10 +97,10 @@ class PizzaHandler {
 
             for (var i = 0; i < pizzaData.length; i++) {
                 var info = pizzaData[i];
-                var id = info.Id;
-                var Type = info.Type;
-                var Size = info.Size;
-                var Toppings = info.Toppings;
+                var id = info.id;
+                var Type = info.type;
+                var Size = info.size;
+                var Toppings = info.toppings;
                 pizzaItemTable.append('<tr id="' + id + '">\n' +
                     '                        <td data-label="Name" id="Type' + id + '" data-content="' + Type + '"><label> ' + Type + ' </label></td>\n' +
                     '                        <td data-label="Size"><div style="">  <input id="Size' + id + '" style="outline: none; border: none" type="text" placeholder="Size"> </div></td>\n' +
@@ -129,15 +129,15 @@ class PizzaHandler {
         function onEdit (event) {
             var pizzaId = $(event.target).attr('id').split("edit")[1];
             var data = getPizzaDataFromMem(pizzaId);
-            if (data.Id !== undefined) {
-                var type = data.Type;
-                var size = data.Size;
-                var toppings = data.Toppings;
+            if (data.id !== undefined) {
+                var type = data.type;
+                var size = data.size;
+                var toppings = data.toppings;
                 pizzaTypeDD.dropdown('set selected', type);
                 pizzaSizeDD.dropdown('set selected', size);
                 toppingsDiv.val(toppings);
                 isEdit = true;
-                editPizzaId = data.Id;
+                editPizzaId = data.id;
             }
         }
 
@@ -145,7 +145,7 @@ class PizzaHandler {
             var data = {};
             for (var i = 0; i < pizzaData.length; i++) {
                 var info = pizzaData[i];
-                var id = info.Id;
+                var id = info.id;
                 if (id.toString() === pizzaId) {
                     data = info;
                 }
@@ -180,7 +180,7 @@ class PizzaHandler {
                 type: 'POST',
                 url: '/pizza/delete',
                 data:{
-                    Id: pizzaId
+                    id: pizzaId
                 },
                 async: false,
                 success: function (response) {
@@ -197,9 +197,9 @@ class PizzaHandler {
                 type: 'POST',
                 url: '/pizza/save',
                 data:{
-                    Type: pizzaType,
-                    Size: pizzaSize,
-                    Toppings: pizzaToppings,
+                    type: pizzaType,
+                    size: pizzaSize,
+                    toppings: pizzaToppings,
                 },
                 success: function (response) {
                     var message = response.message;
@@ -216,10 +216,10 @@ class PizzaHandler {
                 type: 'POST',
                 url: '/pizza/edit',
                 data:{
-                    Id: editPizzaId,
-                    Type: pizzaType,
-                    Size: pizzaSize,
-                    Toppings: pizzaToppings,
+                    id: editPizzaId,
+                    type: pizzaType,
+                    size: pizzaSize,
+                    toppings: pizzaToppings,
                 },
                 success: function (response) {
                     var message = response.message;
@@ -236,8 +236,8 @@ class PizzaHandler {
                 type: 'POST',
                 url: '/pizza/getData',
                 data:{
-                    Type: filterPizzaType,
-                    Size: filterPizzaSize,
+                    type: filterPizzaType,
+                    size: filterPizzaSize,
                 },
                 async: false,
                 success: function (response) {
